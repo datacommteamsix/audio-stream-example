@@ -6,12 +6,14 @@ receiver::receiver(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	// Create a server to listen for tcp request
 	connect(&mServer, &QTcpServer::newConnection, this, &receiver::newConnectionHandler);
 	mServer.listen(QHostAddress::Any, 42069);
 }
 
 void receiver::newConnectionHandler()
 {
+	// Grab an incoming connection
 	mSocket = mServer.nextPendingConnection();
 	mSocket->setSocketOption(QAbstractSocket::ReceiveBufferSizeSocketOption, QVariant(8192));
 	connect(mSocket, &QTcpSocket::readyRead, this, &receiver::incomingDataHandler);
@@ -24,7 +26,7 @@ void receiver::incomingDataHandler()
 	{
 		QAudioFormat format;
 
-		// GOOD WAV FILE
+		// Set the format to the file's format
 		format.setSampleRate(48000);
 		format.setChannelCount(2);
 		format.setSampleSize(16);
@@ -32,6 +34,7 @@ void receiver::incomingDataHandler()
 		format.setByteOrder(QAudioFormat::LittleEndian);
 		format.setSampleType(QAudioFormat::UnSignedInt);
 
+		// Create the audio output with specificed format and tcp socket
 		mAudioOut = new QAudioOutput(format, this);
 		mAudioOut->setBufferSize(8192);
 		mAudioOut->start((QTcpSocket *)QObject::sender());
