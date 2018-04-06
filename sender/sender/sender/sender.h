@@ -29,7 +29,6 @@ private:
 	QTcpSocket * mSocket;
 
 private slots:
-	void connectHandler();
 	void selectSongHandler();
 	void streamSongHandler();
 };

@@ -2,15 +2,9 @@
 
 receiver::receiver(QWidget *parent)
 	: QMainWindow(parent)
-	, mPlayer(this, QMediaPlayer::StreamPlayback)
-	, mData()
+	, mAudioOut(nullptr)
 {
 	ui.setupUi(this);
-
-	mBuffer = new QBuffer(&mData, this);
-	mBuffer->open(QIODevice::ReadWrite);
-
-	connect(&mPlayer, &QMediaPlayer::mediaStatusChanged, this, &receiver::mediaStatusChangedHandler);
 
 	connect(&mServer, &QTcpServer::newConnection, this, &receiver::newConnectionHandler);
 	mServer.listen(QHostAddress::Any, 42069);
@@ -26,20 +20,21 @@ void receiver::newConnectionHandler()
 
 void receiver::incomingDataHandler()
 {
-	QTcpSocket * socket = (QTcpSocket *)QObject::sender();
-	QByteArray data = socket->readAll();
-	mData.append(data, data.size());
-	qDebug() << "buffer is at size" << mBuffer->size();
-
-	if (mPlayer.state() != QMediaPlayer::PlayingState && mBuffer->size() > 56000)
+	if (!mAudioOut)
 	{
-		mPlayer.setMedia(QMediaContent(), mBuffer);
-		mPlayer.setPosition(0);
-		mPlayer.play();
-	}
-}
+		QAudioFormat format;
 
-void receiver::mediaStatusChangedHandler()
-{
-	qDebug() << mPlayer.mediaStatus();
+		// GOOD WAV FILE
+		format.setSampleRate(48000);
+		format.setChannelCount(2);
+		format.setSampleSize(16);
+		format.setCodec("audio/pcm");
+		format.setByteOrder(QAudioFormat::LittleEndian);
+		format.setSampleType(QAudioFormat::UnSignedInt);
+
+		mAudioOut = new QAudioOutput(format, this);
+		mAudioOut->setBufferSize(8192);
+		mAudioOut->start((QTcpSocket *)QObject::sender());
+		qDebug() << "Music started";
+	}
 }

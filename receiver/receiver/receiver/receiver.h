@@ -2,6 +2,9 @@
 
 #include <QDebug>
 
+#include <QAudioDecoder>
+#include <QAudioFormat>
+#include <QAudioOutput>
 #include <QBuffer>
 #include <QByteArray>
 #include <QMediaPlayer>
@@ -21,9 +24,7 @@ public:
 private:
 	Ui::receiverClass ui;
 
-	QMediaPlayer mPlayer;
-	QBuffer * mBuffer;
-	QByteArray mData;
+	QAudioOutput * mAudioOut;
 
 	QTcpServer mServer;
 	QTcpSocket * mSocket;
@@ -31,5 +32,4 @@ private:
 private slots:
 	void newConnectionHandler();
 	void incomingDataHandler();
-	void mediaStatusChangedHandler();
 };

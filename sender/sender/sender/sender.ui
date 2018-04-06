@@ -14,7 +14,7 @@
    <string>sender</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -52,13 +52,6 @@
         </layout>
        </item>
       </layout>
-     </item>
-     <item>
-      <widget class="QPushButton" name="buttonConnect">
-       <property name="text">
-        <string>Connect</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </widget>
