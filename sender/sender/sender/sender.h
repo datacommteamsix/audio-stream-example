@@ -9,7 +9,6 @@
 #include <QPushButton>
 #include <QString>
 #include <QTcpSocket>
-#include <QThread>
 
 #include <QtWidgets/QMainWindow>
 #include "ui_sender.h"

@@ -48,6 +48,5 @@ void sender::streamSongHandler()
 		mSocket->flush();
 		count += BUFFERSIZE;
 		qDebug() << count;
-		QThread::msleep(10);
 	}
 }
