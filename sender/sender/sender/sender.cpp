@@ -23,8 +23,13 @@ void sender::selectSongHandler()
 	wavfile header;
 	memset(&header, 0, sizeof(wavfile));
 	mSong->read((char *)&header, sizeof(header));
+
 	qDebug() << "sample rate" << header.sampleRate;
 	qDebug() << "sample size" << header.bitsPerSample;
+	qDebug() << "bytes in data" << header.bytesInData;
+	qDebug() << "bytes per second" << header.bytesPerSecond;
+	qDebug() << "total length of song in bytes" << header.totalLength;
+	qDebug() << "total length of song in seconds" << header.totalLength / header.bytesPerSecond;
 
 	// Connect to receiver
 	mSocket = new QTcpSocket(this);

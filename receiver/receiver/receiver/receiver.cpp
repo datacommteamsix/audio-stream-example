@@ -26,8 +26,8 @@ void receiver::incomingDataHandler()
 	{
 		QAudioFormat format;
 
-		// Set the format to the file's format
-		format.setSampleRate(48000);
+		// Common WAV file format
+		format.setSampleRate(44100);
 		format.setChannelCount(2);
 		format.setSampleSize(16);
 		format.setCodec("audio/pcm");
